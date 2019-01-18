@@ -35,7 +35,7 @@ class Provider extends AbstractProvider
      */
     protected function getTokenUrl()
     {
-        return $this->getInstanceUri().'oauth/token';
+        return $this->getInstanceUriInternal().'oauth/token';
     }
 
     /**
@@ -43,7 +43,7 @@ class Provider extends AbstractProvider
      */
     protected function getUserByToken($token)
     {
-        $response = $this->getHttpClient()->get($this->getInstanceUri().'api/v4/user', [
+        $response = $this->getHttpClient()->get($this->getInstanceUriInternal().'api/v4/user', [
             'headers' => [
                 'Authorization' => 'Bearer '.$token,
             ],
@@ -87,8 +87,16 @@ class Provider extends AbstractProvider
     /**
      * {@inheritdoc}
      */
+    protected function getInstanceUriInternal()
+    {
+        return $this->getConfig('internal_uri', 'https://gitlab.com/');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function additionalConfigKeys()
     {
-        return ['instance_uri'];
+        return ['instance_uri', 'internal_uri'];
     }
 }
